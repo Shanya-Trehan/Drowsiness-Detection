@@ -51,19 +51,20 @@ while True:
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
     faces = detector(gray)
+    face_frame = frame.copy()
     for face in faces:
         x1 = face.left()
         y1 = face.top()
         x2 = face.right()
         y2 = face.bottom()
 
-        face_frame = frame.copy()
+        # face_frame = frame.copy()
         cv2.rectangle(face_frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
 
         landmarks = predictor(gray, face)
         landmarks = face_utils.shape_to_np(landmarks)
 
-        # Here the numbers are eye landmarks-1 ('-1' as array starts with zero)
+        # Here the numbers are "eye landmarks-1" ('-1' as array starts with zero)
         left_blink = blinked(landmarks[36], landmarks[37], landmarks[38], landmarks[41], landmarks[40], landmarks[39])
         right_blink = blinked(landmarks[42], landmarks[43], landmarks[44], landmarks[47], landmarks[46], landmarks[45])
 
@@ -97,8 +98,8 @@ while True:
             (x, y) = landmarks[n]
             cv2.circle(face_frame, (x, y), 1, (255, 255, 255), -1)
 
-    cv2.imshow("Frame", frame)
-    cv2.imshow("Result of detector", face_frame)
+    cv2.imshow("Status", frame)
+    cv2.imshow("Face landmarks", face_frame)
     key = cv2.waitKey(1)
     if key == 27:
         break
